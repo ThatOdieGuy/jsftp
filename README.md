@@ -204,48 +204,16 @@ will grow as jsftp evolves.
 Debugging
 ---------
 
-In order to enable debug mode in a FTP connection, a `debugMode` parameter can
-be used in the constructors's config object:
+In order to enable debug mode, jsftp uses [debug](https://github.com/visionmedia/debug) to handle debug logging.
+
+Set an environmental variable `DEBUG=jsftp*` to turn on logging.
+
+In order to catch uncatch errors:
 
 ```javascript
-var Ftp = new JSFtp({
-  host: "myserver.com",
-  port: 3331,
-  user: "user",
-  pass: "1234",
-  debugMode: true
-});
-```
-
-It can also be activated or deactivated by calling the `setDebugMode` method:
-
-```javascript
-Ftp.setDebugMode(true); // Debug Mode on
-Ftp.setDebugMode(false); // Debug mode off
-```
-
-If the debug mode is on, the jsftp instance will emit `jsftp_debug` events with
-two parameters: the first is the type of the event and the second and object
-including data related to the event. There are 3 possible types of events:
-
-- `response` events: These are response from the FTP server to the user's FTP
-  commands
-
-- `user_command` events: These are commands that the user issues to the
-  FTP server.
-
-- `event:{event name}` events: These are other events mostly related to the server
-  connection, such as `timeout`, `connect` or `disconnect`. For example,
-  a timeout event will have the name `event:timeout`.
-
-In order to react to print all debug events (for example), we would listen to the
-debug messages like this:
-
-```javascript
-Ftp.on('jsftp_debug', function(eventType, data) {
-  console.log('DEBUG: ', eventType);
-  console.log(JSON.stringify(data, null, 2));
-});
+ftp.on('error', function(error) {
+            console.log("jsftp catchall:\n", error)
+        });
 ```
 
 Installation
